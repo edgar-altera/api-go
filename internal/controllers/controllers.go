@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"github.com/edgar-altera/api-go/pkg/helpers"
 )
 
 func AllMovies(w http.ResponseWriter, r *http.Request) {
@@ -22,5 +23,6 @@ func UpdateMovie(w http.ResponseWriter, r *http.Request) {
 }
  
 func DeleteMovie(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Delete movie!")
+	// fmt.Fprintln(w, "Delete movie!!")
+	helpers.ResponseWithJson(w, http.StatusOK, map[string]string{"result": "success", "id": "a45f4osaask2"})
 }
