@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"github.com/edgar-altera/api-go/internal/models"
 	"github.com/edgar-altera/api-go/pkg/helpers"
 )
 
@@ -23,6 +24,13 @@ func UpdateMovie(w http.ResponseWriter, r *http.Request) {
 }
  
 func DeleteMovie(w http.ResponseWriter, r *http.Request) {
-	// fmt.Fprintln(w, "Delete movie!!")
-	helpers.ResponseWithJson(w, http.StatusOK, map[string]string{"result": "success", "id": "a45f4osaask2"})
+	
+	// p := models.Person {"Edgar", 35, "Dev", true}
+
+	a := models.Address {"Armando Carrera", 5218, false}
+
+	response := models.Response { true, a}
+
+	helpers.ResponseWithJson(w, http.StatusOK, response)
+
 }
