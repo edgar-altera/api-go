@@ -29,7 +29,7 @@ func DeleteMovie(w http.ResponseWriter, r *http.Request) {
 
 	a := models.Address {"Armando Carrera", 5218, false}
 
-	response := models.Response { true, a}
+	response := models.Response { Success: true, Data: a}
 
 	helpers.ResponseWithJson(w, http.StatusOK, response)
 
