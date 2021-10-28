@@ -2,8 +2,9 @@ package main
 
 import (
 	"net/http"
-	"log"
 	"os"
+	log "github.com/sirupsen/logrus"
+    "gopkg.in/natefinch/lumberjack.v2"
 	"github.com/edgar-altera/api-go/internal/server"
 	"github.com/joho/godotenv"
 )
@@ -13,8 +14,13 @@ var port string
 func main() {
 	
 	r := server.NewRouter()
- 
-	log.Printf("Starting App on port %v", port)
+
+	log.WithFields(
+		log.Fields{
+			"port": port,
+			"bar": "bar",
+		},
+	).Info("Starting App")
 
 	http.ListenAndServe(port, r)
 }
@@ -28,4 +34,16 @@ func init() {
     }
 
 	port = ":" + os.Getenv("APP_PORT")
+}
+
+func init() {
+    log.SetOutput(&lumberjack.Logger{
+        Filename:   os.Getenv("LOG_PATH"),
+        MaxSize:    100, // megabytes
+        MaxBackups: 50,
+        MaxAge:     31, //days
+        Compress:   false, // disabled by default
+    })
+
+    log.SetFormatter(&log.JSONFormatter{})
 }

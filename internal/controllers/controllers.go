@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"github.com/edgar-altera/api-go/internal/models"
 	"github.com/edgar-altera/api-go/pkg/helpers"
+	log "github.com/sirupsen/logrus"
 )
 
 func AllMovies(w http.ResponseWriter, r *http.Request) {
@@ -32,5 +33,13 @@ func DeleteMovie(w http.ResponseWriter, r *http.Request) {
 	response := models.Response { Success: true, Data: a}
 
 	helpers.ResponseWithJson(w, http.StatusOK, response)
+
+	log.WithFields(
+		log.Fields{
+			"address": a.Street,
+			"number": a.Number,
+			"status": a.Status,
+		},
+	).Info("Delete movie")
 
 }
