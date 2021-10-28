@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"github.com/edgar-altera/api-go/internal/config"
 	"github.com/edgar-altera/api-go/internal/models"
 	"github.com/edgar-altera/api-go/pkg/helpers"
 	log "github.com/sirupsen/logrus"
@@ -39,6 +40,7 @@ func DeleteMovie(w http.ResponseWriter, r *http.Request) {
 			"address": a.Street,
 			"number": a.Number,
 			"status": a.Status,
+			"test": config.APP_PORT,
 		},
 	).Info("Delete movie")
 
