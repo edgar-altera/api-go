@@ -4,13 +4,23 @@ import (
 	"github.com/joho/godotenv"
 	"log"
 	"os"
-	"fmt"
+	"strconv"
 )
 
 var APP_NAME string
 var APP_PORT string
 var APP_ACCESS_TOKEN string
+
+var MYSQL_HOST string
+var MYSQL_PORT string
+var MYSQL_DB string
+var MYSQL_USER string
+var MYSQL_PASS string
+var MYSQL_TIME string
+
 var LOG_PATH string
+var LOG_CONSOLE_PRINT bool
+var LOG_JSON_FORMAT bool
 
 func init() {
 
@@ -20,7 +30,7 @@ func init() {
         log.Fatal("Error loading .env file")
     }
 
-	fmt.Println("Load env.go")
+	log.Println("Loaded successfully env.go")
 }
 
 func init() {
@@ -28,8 +38,15 @@ func init() {
 	APP_NAME = os.Getenv("APP_NAME")
 	APP_PORT = os.Getenv("APP_PORT")
 	APP_ACCESS_TOKEN = os.Getenv("APP_ACCESS_TOKEN")
-	LOG_PATH = os.Getenv("LOG_PATH")
 
-	fmt.Printf("Load vars log_path=%s \n", LOG_PATH)
-	
+	MYSQL_HOST = os.Getenv("MYSQL_HOST")
+	MYSQL_PORT = os.Getenv("MYSQL_PORT")
+	MYSQL_DB   = os.Getenv("MYSQL_DB")
+	MYSQL_USER = os.Getenv("MYSQL_USER")
+	MYSQL_PASS = os.Getenv("MYSQL_PASS")
+	MYSQL_TIME = os.Getenv("MYSQL_TIME")
+
+	LOG_PATH = os.Getenv("LOG_PATH")
+	LOG_CONSOLE_PRINT, _ = strconv.ParseBool(os.Getenv("LOG_CONSOLE_PRINT"))
+	LOG_JSON_FORMAT, _   = strconv.ParseBool(os.Getenv("LOG_JSON_FORMAT"))
 }

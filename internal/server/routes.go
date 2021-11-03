@@ -9,6 +9,8 @@ import (
 func NewRouter() *mux.Router {
 	r := mux.NewRouter()
 
+	r.Use(middlewares.Logger)
+
 	r.Use(middlewares.Auth)
 
 	r.HandleFunc("/", controllers.AppName).Methods("GET")
@@ -17,7 +19,7 @@ func NewRouter() *mux.Router {
 
 	sr.Use(middlewares.User)
 
-	sr.HandleFunc("/users", controllers.FindUser).Methods("GET")
+	sr.HandleFunc("/users", controllers.AllUsers).Methods("GET")
 
 	movies := r.PathPrefix("/movies").Subrouter()
 

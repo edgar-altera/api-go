@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"github.com/edgar-altera/api-go/internal/config"
+	"github.com/edgar-altera/api-go/internal/database"
 	"github.com/edgar-altera/api-go/internal/models"
 	"github.com/edgar-altera/api-go/pkg/helpers"
 	log "github.com/sirupsen/logrus"
@@ -26,4 +28,67 @@ func FindUser(w http.ResponseWriter, r *http.Request) {
 		},
 	).Info("Find User")
 
+}
+
+func AllUsers(w http.ResponseWriter, r *http.Request) {
+	
+	users, err := index()
+	
+	if err != nil {
+
+		response := models.Response { Success: false, Data: err}
+		
+		helpers.ResponseWithJson(w, http.StatusInternalServerError, response)
+
+		log.WithFields(
+			log.Fields{
+				"error": err,
+			},
+		).Error("AllUsers")
+
+		return
+	}
+
+	response := models.Response { Success: true, Data: users}
+
+	helpers.ResponseWithJson(w, http.StatusOK, response)
+
+	log.WithFields(
+		log.Fields{
+			"test": config.APP_PORT,
+		},
+	).Info("AllUsers")
+
+}
+
+func index() ([]models.User, error) {
+
+	db := database.DB
+
+	users := [] models.User {}
+
+    var user models.User
+
+	rows, err := db.Query(fmt.Sprintf("SELECT * FROM %s", models.UsersTable))
+ 
+	if err != nil {
+			
+		return nil, err
+	}
+
+	for rows.Next() {
+		
+		err = rows.Scan(&user.Id, &user.Username, &user.Password, &user.Status, &user.Config, &user.CreatedAt, &user.UpdatedAt)
+
+		if err != nil {
+			
+			return nil, err
+		}
+
+		users = append(users, user)
+	}
+
+    rows.Close()
+
+	return users, nil
 }

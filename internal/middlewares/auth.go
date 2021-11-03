@@ -6,8 +6,26 @@ import (
 	"github.com/edgar-altera/api-go/internal/config"
 	"github.com/edgar-altera/api-go/internal/models"
 	"github.com/edgar-altera/api-go/pkg/helpers"
-	// log "github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
+
+func Logger(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+        log.WithFields(
+            log.Fields{
+                "Method": r.Method, 
+                "URI": r.RequestURI,
+                "Host": r.Host, 
+                "Path": r.URL.Path,
+                "RemoteAddr": r.RemoteAddr,
+                "UserAgent": r.UserAgent(),
+            },
+        ).Info("Logguer Request")
+
+        next.ServeHTTP(w, r)
+    })
+}
 
 func Auth(next http.Handler) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -24,6 +42,7 @@ func Auth(next http.Handler) http.Handler {
         }
 
 		fmt.Println("Auth middleware")
+
         next.ServeHTTP(w, r)
     })
 }
