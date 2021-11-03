@@ -17,7 +17,7 @@ func init() {
 		log.Fields{
 			"path": LOG_PATH,
 		},
-	).Info("Loaded successfully logging.go")
+	).Info("Logging config successfully")
 }
 
 func output() {
@@ -25,18 +25,18 @@ func output() {
     if LOG_CONSOLE_PRINT {
         log.SetOutput(io.MultiWriter(&lumberjack.Logger{
             Filename:   LOG_PATH,
-            MaxSize:    100, // MB
-            MaxBackups: 50,
-            MaxAge:     31, 
-            Compress:   false, 
+            MaxSize:    LOG_MAX_SIZE_IN_MB, 
+            MaxBackups: LOG_MAX_BACKUPS,
+            MaxAge:     LOG_MAX_AGE, 
+            Compress:   LOG_COMPRESS, 
         }, os.Stdout))
     } else {
         log.SetOutput(&lumberjack.Logger{
             Filename:   LOG_PATH,
-            MaxSize:    100, 
-            MaxBackups: 50,
-            MaxAge:     31, 
-            Compress:   false, 
+            MaxSize:    LOG_MAX_SIZE_IN_MB, 
+            MaxBackups: LOG_MAX_BACKUPS,
+            MaxAge:     LOG_MAX_AGE, 
+            Compress:   LOG_COMPRESS, 
         })
     }
 }
