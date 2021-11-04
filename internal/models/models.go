@@ -12,8 +12,3 @@ type Address struct {
 	Number int
 	Status bool 
 }
-
-type Response struct {
-	Success bool `json:"success"`
-	Data interface{} `json:"data"`
-}

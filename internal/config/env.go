@@ -10,6 +10,7 @@ import (
 var APP_NAME string
 var APP_PORT string
 var APP_ACCESS_TOKEN string
+var APP_LANG string
 
 var MYSQL_HOST string
 var MYSQL_PORT string
@@ -42,6 +43,7 @@ func init() {
 	APP_NAME = os.Getenv("APP_NAME")
 	APP_PORT = os.Getenv("APP_PORT")
 	APP_ACCESS_TOKEN = os.Getenv("APP_ACCESS_TOKEN")
+	APP_LANG = os.Getenv("APP_LANG")
 
 	MYSQL_HOST = os.Getenv("MYSQL_HOST")
 	MYSQL_PORT = os.Getenv("MYSQL_PORT")

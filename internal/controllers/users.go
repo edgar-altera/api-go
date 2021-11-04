@@ -7,6 +7,7 @@ import (
 	"github.com/edgar-altera/api-go/internal/database"
 	"github.com/edgar-altera/api-go/internal/models"
 	"github.com/edgar-altera/api-go/pkg/helpers"
+	"github.com/edgar-altera/api-go/pkg/lang"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -36,7 +37,7 @@ func AllUsers(w http.ResponseWriter, r *http.Request) {
 	
 	if err != nil {
 
-		response := models.Response { Success: false, Data: err}
+		response := models.ErrorResponse { Success: false, Message: lang.Get("StatusInternalServerErrorMessage", r.Header.Get("Accept-Language"))}
 		
 		helpers.ResponseWithJson(w, http.StatusInternalServerError, response)
 

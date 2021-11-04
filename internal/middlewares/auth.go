@@ -6,11 +6,16 @@ import (
 	"github.com/edgar-altera/api-go/internal/config"
 	"github.com/edgar-altera/api-go/internal/models"
 	"github.com/edgar-altera/api-go/pkg/helpers"
+	"github.com/edgar-altera/api-go/pkg/lang"
 	log "github.com/sirupsen/logrus"
 )
 
 func Logger(next http.Handler) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+        if r.Header.Get("Accept-Language") == "" {
+            r.Header.Set("Accept-Language", config.APP_LANG)
+        }
 
         log.WithFields(
             log.Fields{
@@ -34,7 +39,7 @@ func Auth(next http.Handler) http.Handler {
         
         if authorization != "Bearer " + config.APP_ACCESS_TOKEN {
 
-			response := models.Response { Success: false, Data: "Unauthorized"}
+			response := models.ErrorResponse { Success: false, Message: lang.Get("StatusUnauthorizedMessage", r.Header.Get("Accept-Language"))}
             
 			helpers.ResponseWithJson(w, http.StatusUnauthorized, response)
 
