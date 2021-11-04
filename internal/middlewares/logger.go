@@ -21,6 +21,7 @@ func Logger(next http.Handler) http.Handler {
                 "Path": r.URL.Path,
                 "RemoteAddr": r.RemoteAddr,
                 "UserAgent": r.UserAgent(),
+				"AcceptLanguage": r.Header.Get("Accept-Language"),
             },
         ).Info("Logguer Request")
 
