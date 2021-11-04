@@ -44,6 +44,7 @@ func AllUsers(w http.ResponseWriter, r *http.Request) {
 		log.WithFields(
 			log.Fields{
 				"error": err,
+				"request_id": r.Header.Get("Request-ID"),
 			},
 		).Error("AllUsers")
 
@@ -57,6 +58,7 @@ func AllUsers(w http.ResponseWriter, r *http.Request) {
 	log.WithFields(
 		log.Fields{
 			"test": config.APP_PORT,
+			"request_id": r.Header.Get("Request-ID"),
 		},
 	).Info("AllUsers")
 
