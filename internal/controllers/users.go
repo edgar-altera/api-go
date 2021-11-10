@@ -32,7 +32,9 @@ func FindUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func AllUsers(w http.ResponseWriter, r *http.Request) {
-	
+	// ctx := r.Context()
+	id := r.Context().Value("id")
+	fmt.Printf("ID from context %d \n", id)
 	users, err := index()
 	
 	if err != nil {

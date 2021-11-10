@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+    "context"
     "errors"
     "strings"
 	"fmt"
@@ -42,10 +43,10 @@ func Auth(next http.Handler) http.Handler {
             return
         }
 
-        fmt.Println(c)
-		fmt.Println("Auth middleware")
+        ctx := r.Context()
+        ctx = context.WithValue(ctx, "id", c.ID)
 
-        next.ServeHTTP(w, r)
+        next.ServeHTTP(w, r.WithContext(ctx))
     })
 }
 
