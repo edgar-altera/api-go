@@ -9,8 +9,11 @@ import (
 
 var APP_NAME string
 var APP_PORT string
-var APP_ACCESS_TOKEN string
 var APP_LANG string
+
+var JWT_SEED string
+var JWT_TIME_EXPIRATION_UNIT string
+var JWT_TIME_EXPIRATION_VALUE int
 
 var MYSQL_HOST string
 var MYSQL_PORT string
@@ -26,6 +29,11 @@ var LOG_MAX_AGE int
 var LOG_COMPRESS bool 
 var LOG_CONSOLE_PRINT bool
 var LOG_JSON_FORMAT bool
+var LOG_SLACK_HOOK_URL string
+var LOG_SLACK_USERNAME string
+var LOG_SLACK_EMOJI string
+var LOG_SLACK_LEVEL_THRESHOLD string
+var LOG_SLACK_CHANNEL string
 
 func init() {
 
@@ -42,8 +50,11 @@ func init() {
 
 	APP_NAME = os.Getenv("APP_NAME")
 	APP_PORT = os.Getenv("APP_PORT")
-	APP_ACCESS_TOKEN = os.Getenv("APP_ACCESS_TOKEN")
 	APP_LANG = os.Getenv("APP_LANG")
+	
+	JWT_SEED = os.Getenv("JWT_SEED")
+	JWT_TIME_EXPIRATION_UNIT = os.Getenv("JWT_TIME_EXPIRATION_UNIT")
+	JWT_TIME_EXPIRATION_VALUE, _ = strconv.Atoi(os.Getenv("JWT_TIME_EXPIRATION_VALUE"))
 
 	MYSQL_HOST = os.Getenv("MYSQL_HOST")
 	MYSQL_PORT = os.Getenv("MYSQL_PORT")
@@ -59,4 +70,9 @@ func init() {
 	LOG_MAX_AGE, _ = strconv.Atoi(os.Getenv("LOG_MAX_AGE"))
 	LOG_COMPRESS, _ = strconv.ParseBool(os.Getenv("LOG_COMPRESS"))
 	LOG_JSON_FORMAT, _ = strconv.ParseBool(os.Getenv("LOG_JSON_FORMAT"))
+	LOG_SLACK_HOOK_URL = os.Getenv("LOG_SLACK_HOOK_URL")
+	LOG_SLACK_USERNAME = os.Getenv("LOG_SLACK_USERNAME")
+	LOG_SLACK_EMOJI = os.Getenv("LOG_SLACK_EMOJI")
+	LOG_SLACK_LEVEL_THRESHOLD = os.Getenv("LOG_SLACK_LEVEL_THRESHOLD")
+	LOG_SLACK_CHANNEL = os.Getenv("LOG_SLACK_CHANNEL")
 }

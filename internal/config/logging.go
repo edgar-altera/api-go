@@ -1,10 +1,11 @@
 package config
 
 import (
-	log "github.com/sirupsen/logrus"
-    "gopkg.in/natefinch/lumberjack.v2"
     "io"
     "os"
+	log "github.com/sirupsen/logrus"
+    ls "github.com/bluele/logrus_slack"
+    "gopkg.in/natefinch/lumberjack.v2"
 )
 
 func init() {
@@ -39,6 +40,14 @@ func output() {
             Compress:   LOG_COMPRESS, 
         })
     }
+
+    log.AddHook(&ls.SlackHook{
+		HookURL:        LOG_SLACK_HOOK_URL,
+		AcceptedLevels: ls.LevelThreshold(getSlackLevelThreshold(LOG_SLACK_LEVEL_THRESHOLD)),
+		Channel:        LOG_SLACK_CHANNEL,
+		IconEmoji:      LOG_SLACK_EMOJI,
+		Username:       LOG_SLACK_USERNAME,
+	})
 }
 
 func format() {
@@ -47,4 +56,30 @@ func format() {
 
         log.SetFormatter(&log.JSONFormatter{})
     }
+}
+
+func getSlackLevelThreshold(ls string) log.Level {
+
+    var level log.Level
+
+    switch ls {
+        case "trace":
+            level = log.TraceLevel
+        case "debug":
+            level = log.DebugLevel
+        case "info":
+            level = log.InfoLevel
+        case "warn":
+            level = log.WarnLevel
+        case "error":
+            level = log.ErrorLevel
+        case "fatal":
+            level = log.FatalLevel
+        case "panic":
+            level = log.PanicLevel
+        default:
+            level = log.WarnLevel
+    }
+
+    return level
 }

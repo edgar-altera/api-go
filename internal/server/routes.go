@@ -8,17 +8,18 @@ import (
 )
  
 func NewRouter() *mux.Router {
+	
 	r := mux.NewRouter()
 
 	r.Use(middlewares.Logger)
 
-	r.Use(middlewares.Auth)
-
 	r.HandleFunc("/", controllers.AppName).Methods(http.MethodGet)
+
+	r.HandleFunc("/login", controllers.Login).Methods(http.MethodPost)
 
 	sr := r.PathPrefix("/").Subrouter()
 
-	sr.Use(middlewares.User)
+	sr.Use(middlewares.Auth)
 
 	sr.HandleFunc("/users", controllers.AllUsers).Methods(http.MethodGet)
 
