@@ -39,7 +39,7 @@ func AllUsers(w http.ResponseWriter, r *http.Request) {
 	
 	if err != nil {
 
-		response := models.ErrorResponse { Success: false, Message: lang.Get("StatusInternalServerErrorMessage", r.Header.Get("Accept-Language"))}
+		response := models.ErrorResponse { Success: false, Message: lang.Get("StatusInternalServerError", r.Header.Get("Accept-Language"))}
 		
 		helpers.ResponseWithJson(w, http.StatusInternalServerError, response)
 
@@ -70,11 +70,11 @@ func index() ([]models.User, error) {
 
 	db := database.DB
 
-	users := [] models.User {}
+	var users [] models.User
 
     var user models.User
 
-	rows, err := db.Query(fmt.Sprintf("SELECT * FROM %s", models.UsersTable))
+	rows, err := db.Query(fmt.Sprintf("SELECT id, username, status, config, created_at, updated_at FROM %s", models.UsersTable))
  
 	if err != nil {
 			
@@ -83,7 +83,7 @@ func index() ([]models.User, error) {
 
 	for rows.Next() {
 		
-		err = rows.Scan(&user.Id, &user.Username, &user.Password, &user.Status, &user.Config, &user.CreatedAt, &user.UpdatedAt)
+		err = rows.Scan(&user.Id, &user.Username, &user.Status, &user.Config, &user.CreatedAt, &user.UpdatedAt)
 
 		if err != nil {
 			
@@ -97,3 +97,26 @@ func index() ([]models.User, error) {
 
 	return users, nil
 }
+
+func GetByUserName(username string) (models.User, error) {
+
+	db := database.DB
+
+    var user models.User
+
+	row, err := db.Query(fmt.Sprintf("SELECT * FROM %s WHERE username='%s' ", models.UsersTable, username))
+ 
+	if err != nil {
+			
+		return user, err
+	}
+
+	row.Next()
+
+	err = row.Scan(&user.Id, &user.Username, &user.PasswordHash, &user.Status, &user.Config, &user.CreatedAt, &user.UpdatedAt)
+
+	row.Close()
+
+	return user, err
+}
+

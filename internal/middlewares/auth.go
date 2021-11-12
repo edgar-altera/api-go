@@ -23,7 +23,7 @@ func Auth(next http.Handler) http.Handler {
 
         if err != nil {
 
-            response := models.ErrorResponse { Success: false, Message: lang.Get("StatusUnauthorizedMessage", r.Header.Get("Accept-Language"))}
+            response := models.ErrorResponse { Success: false, Message: lang.Get("StatusUnauthorized", r.Header.Get("Accept-Language"))}
             
 			helpers.ResponseWithJson(w, http.StatusUnauthorized, response)
 
@@ -36,7 +36,7 @@ func Auth(next http.Handler) http.Handler {
 
         if err != nil {
             
-            response := models.ErrorResponse { Success: false, Message: lang.Get("StatusUnauthorizedMessage", r.Header.Get("Accept-Language"))}
+            response := models.ErrorResponse { Success: false, Message: lang.Get("StatusUnauthorized", r.Header.Get("Accept-Language"))}
             
 			helpers.ResponseWithJson(w, http.StatusUnauthorized, response)
 
