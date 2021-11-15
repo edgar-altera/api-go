@@ -4,7 +4,6 @@ import (
     "context"
     "errors"
     "strings"
-	"fmt"
 	"net/http"
 	"github.com/edgar-altera/api-go/internal/config"
 	"github.com/edgar-altera/api-go/internal/models"
@@ -70,20 +69,4 @@ func tokenFromAuthorization(authorization string) (string, error) {
     }
 
     return l[1], nil
-}
-
-func User(h http.Handler) http.Handler {
-    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        // fmt.Println("middleware", r.URL)
-		fmt.Println("Test middleware")
-        h.ServeHTTP(w, r)
-    })
-}
-
-func Movie(h http.Handler) http.Handler {
-    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        // fmt.Println("middleware", r.URL)
-		fmt.Println("Test middleware 2")
-        h.ServeHTTP(w, r)
-    })
 }

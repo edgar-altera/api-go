@@ -50,6 +50,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	c := claim.Claim{
 		user.Id, 
+		user.IsAdmin,
 		jwt.StandardClaims{
 			ExpiresAt: expiresAt,
 		},

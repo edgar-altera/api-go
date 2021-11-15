@@ -21,14 +21,18 @@ func NewRouter() *mux.Router {
 
 	sr.Use(middlewares.Auth)
 
-	sr.HandleFunc("/users", controllers.AllUsers).Methods(http.MethodGet)
+	// sr.HandleFunc("/users", controllers.IndexUsers).Methods(http.MethodGet)
 
-	movies := r.PathPrefix("/movies").Subrouter()
+	admin := r.PathPrefix("/admin").Subrouter()
 
-	movies.Use(middlewares.Movie)
+	admin.Use(middlewares.Auth)
+	admin.Use(middlewares.Admin)
 
-	movies.HandleFunc("/{id}", controllers.FindMovie).Methods(http.MethodGet)
-	movies.HandleFunc("/{id}", controllers.UpdateMovie).Methods(http.MethodPut)
+	admin.HandleFunc("/users", controllers.IndexUser).Methods(http.MethodGet)
+	admin.HandleFunc("/users/{id}", controllers.ShowUser).Methods(http.MethodGet)
+	admin.HandleFunc("/users", controllers.StoreUser).Methods(http.MethodPost)
+	admin.HandleFunc("/users/{id}", controllers.UpdateUser).Methods(http.MethodPut)
+	admin.HandleFunc("/users/{id}", controllers.DestroyUser).Methods(http.MethodDelete)
 
 	return r
 }

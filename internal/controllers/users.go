@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"github.com/edgar-altera/api-go/internal/config"
@@ -11,27 +12,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
- 
-func FindUser(w http.ResponseWriter, r *http.Request) {
-	
-	user := models.Person {"Edgar", 35, "Dev", true}
-
-	response := models.Response { Success: true, Data: user}
-
-	helpers.ResponseWithJson(w, http.StatusOK, response)
-
-	log.WithFields(
-		log.Fields{
-			"name": user.Name,
-			"age": user.Age,
-			"degree": user.Degree,
-			"test": config.APP_PORT,
-		},
-	).Info("Find User")
-
-}
-
-func AllUsers(w http.ResponseWriter, r *http.Request) {
+func IndexUser(w http.ResponseWriter, r *http.Request) {
 	// ctx := r.Context()
 	id := r.Context().Value("id")
 	fmt.Printf("ID from context %d \n", id)
@@ -63,6 +44,22 @@ func AllUsers(w http.ResponseWriter, r *http.Request) {
 			"request_id": r.Header.Get("Request-ID"),
 		},
 	).Info("AllUsers")
+
+}
+
+func ShowUser(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func StoreUser(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func UpdateUser(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func DestroyUser(w http.ResponseWriter, r *http.Request) {
 
 }
 
@@ -113,10 +110,31 @@ func GetByUserName(username string) (models.User, error) {
 
 	row.Next()
 
-	err = row.Scan(&user.Id, &user.Username, &user.PasswordHash, &user.Status, &user.Config, &user.CreatedAt, &user.UpdatedAt)
+	err = row.Scan(&user.Id, &user.Username, &user.PasswordHash, &user.Status, &user.IsAdmin, &user.Config, &user.CreatedAt, &user.UpdatedAt)
 
 	row.Close()
 
 	return user, err
+}
+
+func IsAdminUser(id int) (bool, error) {
+
+	db := database.DB
+
+    var count int
+
+	err := db.QueryRow(fmt.Sprintf("SELECT count(*) FROM %s WHERE id=%d AND is_admin=true ", models.UsersTable, id)).Scan(&count)
+ 
+	if err != nil {
+			
+		return false, err
+	}
+
+	if count == 1 {
+
+		return true, nil
+	}
+	
+	return false, errors.New("User is not Admin")
 }
 

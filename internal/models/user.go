@@ -13,6 +13,7 @@ type User struct {
 	Password string `json:"password,omitempty" validate:"required"`
 	PasswordHash string `json:"-"`
 	Status bool `json:"status"`
+	IsAdmin bool `json:"is_admin"`
 	Config string `json:"config"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`

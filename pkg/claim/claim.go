@@ -7,6 +7,7 @@ import (
 
 type Claim struct {
     ID int `json:"id"`
+    IsAdmin bool `json:"is_admin"`
     jwt.StandardClaims
 }
 
