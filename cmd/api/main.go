@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"github.com/edgar-altera/api-go/internal/config"
 	"github.com/edgar-altera/api-go/internal/server"
+	_"github.com/edgar-altera/api-go/internal/database"
 	log "github.com/sirupsen/logrus"
 )
 

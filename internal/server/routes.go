@@ -3,39 +3,36 @@ package server
 import (
 	"net/http"
 	"github.com/edgar-altera/api-go/internal/controllers"
+	"github.com/edgar-altera/api-go/internal/middlewares"
 	"github.com/gorilla/mux"
 )
  
-type Route struct {
-	Method     string
-	Pattern    string
-	Handler    http.HandlerFunc
-	Middleware mux.MiddlewareFunc
-}
- 
-var routes []Route
- 
-func init() {
-	register("GET", "/movies", controllers.AllMovies, nil)
-	register("GET", "/movies/{id}", controllers.FindMovie, nil)
-	register("POST", "/movies", controllers.CreateMovie, nil)
-	register("PUT", "/movies", controllers.UpdateMovie, nil)
-	register("DELETE", "/movies", controllers.DeleteMovie, nil)
-}
- 
 func NewRouter() *mux.Router {
+	
 	r := mux.NewRouter()
-	for _, route := range routes {
-		r.Methods(route.Method).
-			Path(route.Pattern).
-			Handler(route.Handler)
-		if route.Middleware != nil {
-			r.Use(route.Middleware)
-		}
-	}
+
+	r.Use(middlewares.Logger)
+
+	r.HandleFunc("/", controllers.AppName).Methods(http.MethodGet)
+
+	r.HandleFunc("/login", controllers.Login).Methods(http.MethodPost)
+
+	sr := r.PathPrefix("/").Subrouter()
+
+	sr.Use(middlewares.Auth)
+
+	// sr.HandleFunc("/users", controllers.IndexUsers).Methods(http.MethodGet)
+
+	admin := r.PathPrefix("/admin").Subrouter()
+
+	admin.Use(middlewares.Auth)
+	admin.Use(middlewares.Admin)
+
+	admin.HandleFunc("/users", controllers.IndexUser).Methods(http.MethodGet)
+	admin.HandleFunc("/users/{id}", controllers.ShowUser).Methods(http.MethodGet)
+	admin.HandleFunc("/users", controllers.StoreUser).Methods(http.MethodPost)
+	admin.HandleFunc("/users/{id}", controllers.UpdateUser).Methods(http.MethodPut)
+	admin.HandleFunc("/users/{id}", controllers.DestroyUser).Methods(http.MethodDelete)
+
 	return r
-}
- 
-func register(method, pattern string, handler http.HandlerFunc, middleware mux.MiddlewareFunc) {
-	routes = append(routes, Route{method, pattern, handler, middleware})
 }
